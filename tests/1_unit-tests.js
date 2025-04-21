@@ -21,8 +21,19 @@ suite('Unit Tests', () => {
     assert.isFalse(solver.validate(puzzlesAndSolutions[6][0]).isValid, "It should be invalid");
     assert.equal(solver.validate(puzzlesAndSolutions[6][0]).error, "Expected puzzle to be 81 characters long", "Error in the error return");
   });
+
+  test('test a valid row placement ', () => {
+    assert.isTrue(solver.checkRowPlacement(puzzlesAndSolutions[0][0], 1, 2, 3).valid, "It should be valid");
+  });
+
+  test('test an invalid row placement ', () => {
+    assert.isFalse(solver.checkRowPlacement(puzzlesAndSolutions[0][0], 1, 2, 8).valid, "It should be invalid");
+    assert.equal(solver.checkRowPlacement(puzzlesAndSolutions[0][0], 1, 2, 8).conflict, "row", "It should be 'row'");
+  });
+
 });
 
 /*
 COMMENTS
+
 */
