@@ -19,17 +19,21 @@ class SudokuSolver {
 
   checkColPlacement(puzzleString, row, column, value) {
     const array0 = puzzleString.split('');
-    const colArr = array0.filter((_, i) => (i%9)+(column-1) === 0);
+    const colArr = array0.filter((_, i) => (i%9) === (column -1));
     if (colArr.includes(value)) return {valid: false , conflict: "column"};
     else return {valid: true};
   }
 
   checkRegionPlacement(puzzleString, row, column, value) {
+    const y = Math.floor((row-1)/3);
+    const x = Math.floor((column-1)/3);
     const array0 = puzzleString.split('');
-    const y = Math.floor(row/3);
-    const x = Math.floor(column/3);
-    array0 = array0.slice((27*y+3*x), (27*y+3*x+21));
-    const regArr = array0.filter((_, i) => i%9 < 3);
+    const regArr = [];
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        const index = (y * 3 + i) * 9 + (x * 3 + j);
+        regArr.push(array0[index]);
+    }}
     if (regArr.includes(value)) return {valid: false , conflict: "region"};
     else return {valid: true};
   }
