@@ -39,9 +39,61 @@ class SudokuSolver {
   }
 
   solve(puzzleString) {
-    if (!this.validate(puzzleString).isValid) return this.validate(puzzleString).error;
-    const solution = [];
-    return solution;
+    //Puzzle Validation
+    const validation = this.validate(puzzleString);
+    if (!validation.isValid) return validation.error;
+    const solution = puzzleString.split('');
+
+    let loopFlag = true;
+    const regex = /^[1-9]$/;
+
+    while (loopFlag) {
+      loopFlag = false;
+
+      //iterate in table
+      for (let index = 0; index < solution.length; index++) {
+        const el = solution[index];
+        if (regex.test(el)) continue;
+        const pool = [];
+
+        //Case of blank
+        if (el === ".") {
+          for (let i = 1; i < 10; i++) {
+            if (!this.checkRowPlacement(puzzleString, Math.floor(index/9+1), undefined, String(i)).valid) continue;
+            else if (!this.checkColPlacement(puzzleString, undefined, (index%9+1), String(i)).valid) continue;
+            else if (!this.checkRegionPlacement(puzzleString, Math.floor(index/9+1), (index%9+1), String(i)).valid) continue;
+            else pool.push(i);
+          }
+          if (pool.length > 1) solution[index] = pool.join("");
+          else {
+            solution[index] = pool.join("");
+            console.log(`We found the answer to row: ${Math.floor(index/9+1)} column: ${(index%9+1)}, it is ${solution[index]}`);
+            loopFlag = true;
+          }
+        }
+
+        //Case of remaining possibilities
+        else {
+          for (let i of el) {
+            if (!this.checkRowPlacement(puzzleString, Math.floor(index/9+1), undefined, String(i)).valid) continue;
+            else if (!this.checkColPlacement(puzzleString, undefined, (index%9+1), String(i)).valid) continue;
+            else if (!this.checkRegionPlacement(puzzleString, Math.floor(index/9+1), (index%9+1), String(i)).valid) continue;
+            else pool.push(i);
+          }
+          if (pool.length > 1) solution[index] = pool.join("");
+          else {
+            solution[index] = pool.join("");
+            console.log(`We found the answer to row: ${Math.floor(index/9)+1} column: ${(index%9)+1}, it is ${solution[index]}`);
+            loopFlag = true;
+          }
+        }
+      }
+    }
+
+    // verif and return
+    const solutionString = solution.join("");
+    console.log("Final Solution: " + solution);
+    return solutionString;
   }
 }
 
