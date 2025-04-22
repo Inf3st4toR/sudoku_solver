@@ -42,57 +42,33 @@ class SudokuSolver {
     //Puzzle Validation
     const validation = this.validate(puzzleString);
     if (!validation.isValid) return validation.error;
+
+    //Initialization
     const solution = puzzleString.split('');
+    const progress = {};
 
-    let loopFlag = true;
-    const regex = /^[1-9]$/;
-
-    while (loopFlag) {
-      loopFlag = false;
-
-      //iterate in table
-      for (let index = 0; index < solution.length; index++) {
-        const el = solution[index];
-        if (regex.test(el)) continue;
-        const pool = [];
-
-        //Case of blank
-        if (el === ".") {
-          for (let i = 1; i < 10; i++) {
-            if (!this.checkRowPlacement(puzzleString, Math.floor(index/9+1), undefined, String(i)).valid) continue;
-            else if (!this.checkColPlacement(puzzleString, undefined, (index%9+1), String(i)).valid) continue;
-            else if (!this.checkRegionPlacement(puzzleString, Math.floor(index/9+1), (index%9+1), String(i)).valid) continue;
-            else pool.push(i);
-          }
-          if (pool.length > 1) solution[index] = pool.join("");
-          else {
-            solution[index] = pool.join("");
-            console.log(`We found the answer to row: ${Math.floor(index/9+1)} column: ${(index%9+1)}, it is ${solution[index]}`);
-            loopFlag = true;
-          }
+    //Initial grid mapping
+    for (let index = 0; index < solution.length; index++) {
+      const el = solution[index];
+      if (el === ".") {
+        let guess = "";
+        for (let i = 1; i < 10; i++) {
+          if (!this.checkRowPlacement(puzzleString, Math.floor(index/9+1), undefined, String(i)).valid) continue;
+          else if (!this.checkColPlacement(puzzleString, undefined, (index%9+1), String(i)).valid) continue;
+          else if (!this.checkRegionPlacement(puzzleString, Math.floor(index/9+1), (index%9+1), String(i)).valid) continue;
+          else guess += String(i);
         }
-
-        //Case of remaining possibilities
+        if (guess.length > 1) progress[index] = guess;
         else {
-          for (let i of el) {
-            if (!this.checkRowPlacement(puzzleString, Math.floor(index/9+1), undefined, String(i)).valid) continue;
-            else if (!this.checkColPlacement(puzzleString, undefined, (index%9+1), String(i)).valid) continue;
-            else if (!this.checkRegionPlacement(puzzleString, Math.floor(index/9+1), (index%9+1), String(i)).valid) continue;
-            else pool.push(i);
-          }
-          if (pool.length > 1) solution[index] = pool.join("");
-          else {
-            solution[index] = pool.join("");
-            console.log(`We found the answer to row: ${Math.floor(index/9)+1} column: ${(index%9)+1}, it is ${solution[index]}`);
-            loopFlag = true;
-          }
-        }
+          solution[index] = guess;
+          console.log(`We found the answer to row: ${Math.floor(index/9+1)} column: ${(index%9+1)}, it is ${solution[index]}`);
+        } 
       }
     }
 
-    // verif and return
+    //Final return
+    console.log(JSON.stringify(progress));
     const solutionString = solution.join("");
-    console.log("Final Solution: " + solution);
     return solutionString;
   }
 }
