@@ -55,7 +55,6 @@ class SudokuSolver {
           solution[index] = guess;
           puzzleString = solution.join("");
           flag = true;
-          console.log(`We found the answer to row: ${Math.floor(index/9+1)} column: ${(index%9+1)}, it is ${solution[index]}`);
         }
       }
     }
@@ -70,6 +69,7 @@ class SudokuSolver {
 
     //Initialization
     const solution = puzzleString.split('');
+    let solutionString = puzzleString;
     const progress = {};
     let flag = true;
 
@@ -79,28 +79,27 @@ class SudokuSolver {
       if (el === ".") {
         let guess = "";
         for (let i = 1; i < 10; i++) {
-          if (!this.checkRowPlacement(puzzleString, Math.floor(index/9+1), undefined, String(i)).valid) continue;
-          else if (!this.checkColPlacement(puzzleString, undefined, (index%9+1), String(i)).valid) continue;
-          else if (!this.checkRegionPlacement(puzzleString, Math.floor(index/9+1), (index%9+1), String(i)).valid) continue;
+          if (!this.checkRowPlacement(solutionString, Math.floor(index/9+1), undefined, String(i)).valid) continue;
+          else if (!this.checkColPlacement(solutionString, undefined, (index%9+1), String(i)).valid) continue;
+          else if (!this.checkRegionPlacement(solutionString, Math.floor(index/9+1), (index%9+1), String(i)).valid) continue;
           else guess += String(i);
         }
         if (guess.length > 1) progress[index] = guess;
         else {
           solution[index] = guess;
-          puzzleString = solution.join("");
-          console.log(`We found the answer to row: ${Math.floor(index/9+1)} column: ${(index%9+1)}, it is ${solution[index]}`);
+          solutionString = solution.join("");
         } 
       }
     }
-    console.log(solution.join(""));
 
     //Simple resolution loop OR recursion
-    puzzleString = this.simpleCheck(puzzleString, solution, progress);
+    solutionString = this.simpleCheck(solutionString, solution, progress);
 
     //Final return
-    console.log(JSON.stringify(progress));
-    console.log("Final:" + puzzleString);
-    return puzzleString;
+    if (Object.keys(progress).length === 0) return solutionString;
+    else {
+      console.log("Cannot complete the puzzle. Remaining items: " + progress);
+    }
   }
 }
 
