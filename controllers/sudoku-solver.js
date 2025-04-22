@@ -26,10 +26,11 @@ class SudokuSolver {
 
   checkRegionPlacement(puzzleString, row, column, value) {
     const array0 = puzzleString.split('');
-    const x = Math.floor(row/3);
-    const y = Math.floor(column/3);
-    const regArr = array.filter((_, i) => Math.floor(i/9) >= x*3 && Math.floor(i/9) < x*3+3 && i%9 >= y*3 && i%9 < y*3+3);
-    if (colArr.includes(value)) return {valid: false , conflict: "region"};
+    const y = Math.floor(row/3);
+    const x = Math.floor(column/3);
+    array0 = array0.slice((27*y+3*x), (27*y+3*x+21));
+    const regArr = array0.filter((_, i) => i%9 < 3);
+    if (regArr.includes(value)) return {valid: false , conflict: "region"};
     else return {valid: true};
   }
 
