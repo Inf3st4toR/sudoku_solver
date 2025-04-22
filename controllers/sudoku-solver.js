@@ -38,6 +38,31 @@ class SudokuSolver {
     else return {valid: true};
   }
 
+  simpleCheck(puzzleString, solution, progress) {
+    let flag = true;
+    while (flag) {
+      flag = false;
+      for (const [index, val] of Object.entries(progress)) {
+        let guess = "";
+        for (let i of val) {
+          if (!this.checkRowPlacement(puzzleString, Math.floor(index/9+1), undefined, String(i)).valid) continue;
+          else if (!this.checkColPlacement(puzzleString, undefined, (index%9+1), String(i)).valid) continue;
+          else if (!this.checkRegionPlacement(puzzleString, Math.floor(index/9+1), (index%9+1), String(i)).valid) continue;
+          else guess += String(i);
+        }
+        if (guess.length === 1) {
+          delete progress[index];
+          solution[index] = guess;
+          puzzleString = solution.join("");
+          flag = true;
+          console.log(`We found the answer to row: ${Math.floor(index/9+1)} column: ${(index%9+1)}, it is ${solution[index]}`);
+        }
+      }
+    }
+    const returnString = puzzleString;
+    return returnString;
+  }
+
   solve(puzzleString) {
     //Puzzle Validation
     const validation = this.validate(puzzleString);
@@ -46,6 +71,7 @@ class SudokuSolver {
     //Initialization
     const solution = puzzleString.split('');
     const progress = {};
+    let flag = true;
 
     //Initial grid mapping
     for (let index = 0; index < solution.length; index++) {
@@ -61,15 +87,20 @@ class SudokuSolver {
         if (guess.length > 1) progress[index] = guess;
         else {
           solution[index] = guess;
+          puzzleString = solution.join("");
           console.log(`We found the answer to row: ${Math.floor(index/9+1)} column: ${(index%9+1)}, it is ${solution[index]}`);
         } 
       }
     }
+    console.log(solution.join(""));
+
+    //Simple resolution loop OR recursion
+    puzzleString = this.simpleCheck(puzzleString, solution, progress);
 
     //Final return
     console.log(JSON.stringify(progress));
-    const solutionString = solution.join("");
-    return solutionString;
+    console.log("Final:" + puzzleString);
+    return puzzleString;
   }
 }
 

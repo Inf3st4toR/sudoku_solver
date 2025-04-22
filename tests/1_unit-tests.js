@@ -82,7 +82,7 @@ suite('Unit Tests', () => {
 
   test('test a puzzle solve', () => {
     assert.deepEqual(solver.solve(puzzlesAndSolutions[0][0]), puzzlesAndSolutions[0][1], "Sample [0] does not match");
-    //assert.deepEqual(solver.solve(puzzlesAndSolutions[1][0]), puzzlesAndSolutions[1][1], "Sample [1] does not match");
-    //assert.deepEqual(solver.solve(puzzlesAndSolutions[2][0]), puzzlesAndSolutions[2][1], "Sample [2] does not match");
+    assert.deepEqual(solver.solve(puzzlesAndSolutions[1][0]), puzzlesAndSolutions[1][1], "Sample [1] does not match");
+    assert.deepEqual(solver.solve(puzzlesAndSolutions[2][0]), puzzlesAndSolutions[2][1], "Sample [2] does not match");
   });
 });
