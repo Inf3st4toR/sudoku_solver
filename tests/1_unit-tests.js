@@ -67,9 +67,19 @@ suite('Unit Tests', () => {
     assert.equal(solver.checkRegionPlacement(puzzlesAndSolutions[0][0], 9, 9, "9").conflict, "region", "End test should be 'region'");
   });
 
+  test('test a valid puzzle', () => {
+    assert.isArray(solver.solve(puzzlesAndSolutions[0][0]), "It should return an Array");
+  });
+
+  test('test an invalid puzzle', () => {
+    assert.equal(solver.solve(puzzlesAndSolutions[5][0]), "Invalid characters in puzzle", "Error in the invalid error return");
+    assert.equal(solver.solve(puzzlesAndSolutions[6][0]), "Expected puzzle to be 81 characters long", "Error in the length error return");
+  });
+
+  test('test a puzzle solve', () => {
+    assert.deepEqual(solver.solve(puzzlesAndSolutions[0][0]), puzzlesAndSolutions[0][1], "Sample [0] does not match");
+    assert.deepEqual(solver.solve(puzzlesAndSolutions[1][0]), puzzlesAndSolutions[1][1], "Sample [1] does not match");
+    assert.deepEqual(solver.solve(puzzlesAndSolutions[2][0]), puzzlesAndSolutions[2][1], "Sample [2] does not match");
+  });
+
 });
-
-/*
-COMMENTS
-
-*/

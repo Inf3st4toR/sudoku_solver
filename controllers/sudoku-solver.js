@@ -39,7 +39,9 @@ class SudokuSolver {
   }
 
   solve(puzzleString) {
-    
+    if (!this.validate(puzzleString).isValid) return this.validate(puzzleString).error;
+    const solution = [];
+    return solution;
   }
 }
 
