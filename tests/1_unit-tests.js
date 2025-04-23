@@ -70,19 +70,19 @@ suite('Unit Tests', () => {
   });
 
   test('test a valid puzzle', () => {
-    const result = solver.solve(puzzlesAndSolutions[0][0]);
+    const result = solver.solve(puzzlesAndSolutions[0][0]).success;
     assert.isString(result, "Test should return a String");
     assert.strictEqual(result.length, 81, "The result must be 81 characters");
   });
 
   test('test an invalid puzzle', () => {
-    assert.equal(solver.solve(puzzlesAndSolutions[5][0]), "Invalid characters in puzzle", "Error in the invalid error return");
-    assert.equal(solver.solve(puzzlesAndSolutions[6][0]), "Expected puzzle to be 81 characters long", "Error in the length error return");
+    assert.equal(solver.solve(puzzlesAndSolutions[5][0]).error, "Invalid characters in puzzle", "Error in the invalid error return");
+    assert.equal(solver.solve(puzzlesAndSolutions[6][0]).error, "Expected puzzle to be 81 characters long", "Error in the length error return");
   });
 
   test('test a puzzle solve', () => {
-    assert.deepEqual(solver.solve(puzzlesAndSolutions[0][0]), puzzlesAndSolutions[0][1], "Sample [0] does not match");
-    assert.deepEqual(solver.solve(puzzlesAndSolutions[1][0]), puzzlesAndSolutions[1][1], "Sample [1] does not match");
-    assert.deepEqual(solver.solve(puzzlesAndSolutions[2][0]), puzzlesAndSolutions[2][1], "Sample [2] does not match");
+    assert.deepEqual(solver.solve(puzzlesAndSolutions[0][0]).success, puzzlesAndSolutions[0][1], "Sample [0] does not match");
+    assert.deepEqual(solver.solve(puzzlesAndSolutions[1][0]).success, puzzlesAndSolutions[1][1], "Sample [1] does not match");
+    assert.deepEqual(solver.solve(puzzlesAndSolutions[2][0]).success, puzzlesAndSolutions[2][1], "Sample [2] does not match");
   });
 });

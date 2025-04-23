@@ -65,7 +65,7 @@ class SudokuSolver {
   solve(puzzleString) {
     //Puzzle Validation
     const validation = this.validate(puzzleString);
-    if (!validation.isValid) return validation.error;
+    if (!validation.isValid) return { error: validation.error };
 
     //Initialization
     const solution = puzzleString.split('');
@@ -96,10 +96,8 @@ class SudokuSolver {
     solutionString = this.simpleCheck(solutionString, solution, progress);
 
     //Final return
-    if (Object.keys(progress).length === 0) return solutionString;
-    else {
-      console.log("Cannot complete the puzzle. Remaining items: " + progress);
-    }
+    if (Object.keys(progress).length === 0) return { success: solutionString };
+    else return { error: 'Puzzle cannot be solved' };
   }
 }
 
