@@ -62,7 +62,49 @@ suite('Functional Tests', () => {
     });
   });
 
-  // ADD PASS CASES
+  test('Check post wt valid response', (done) => {
+    chai.request(server)
+    .post('/api/check')
+    .send({ puzzle: puzzlesAndSolutions[0][0], coordinate: "A2", value: "3"})
+    .end((err, res) => {
+      assert.equal(res.status, 200, 'res.status is wrong');
+      assert.deepEqual(res.body, { valid: true }, 'Returned object is wrong');
+      done();
+    });
+  });
+
+  test('Check post wt single conflict', (done) => {
+    chai.request(server)
+    .post('/api/check')
+    .send({ puzzle: puzzlesAndSolutions[0][0], coordinate: "A2", value: "4"})
+    .end((err, res) => {
+      assert.equal(res.status, 200, 'res.status is wrong');
+      assert.deepEqual(res.body, { valid: false, conflict: ["row"] }, 'Returned object is wrong');
+      done();
+    });
+  });
+
+  test('Check post wt 2 conflict', (done) => {
+    chai.request(server)
+    .post('/api/check')
+    .send({ puzzle: puzzlesAndSolutions[0][0], coordinate: "D7", value: "7"})
+    .end((err, res) => {
+      assert.equal(res.status, 200, 'res.status is wrong');
+      assert.deepEqual(res.body, { valid: false, conflict: ["column", "region"] }, 'Returned object is wrong');
+      done();
+    });
+  });
+
+  test('Check post wt 3 conflict', (done) => {
+    chai.request(server)
+    .post('/api/check')
+    .send({ puzzle: puzzlesAndSolutions[0][0], coordinate: "G3", value: "7"})
+    .end((err, res) => {
+      assert.equal(res.status, 200, 'res.status is wrong');
+      assert.deepEqual(res.body, { valid: false, conflict: ["row", "column", "region"] }, 'Returned object is wrong');
+      done();
+    });
+  });
 
   test('Check post wt missing fields', (done) => {
     chai.request(server)
@@ -79,18 +121,12 @@ suite('Functional Tests', () => {
     .post('/api/check')
     .send({ puzzle: puzzlesAndSolutions[5][0], coordinate: "A1", value: "1"})
     .end((err, res) => {
-      if (err) {
-        console.error(err);
-        done(err);
-        return;
-      }
       assert.equal(res.status, 200, 'res.status is wrong');
       assert.deepEqual(res.body, { error: 'Invalid characters in puzzle' }, 'Returned object is wrong');
       done();
     });
   });
 
-  /*
   test('Check post wt invalid length', (done) => {
     chai.request(server)
     .post('/api/check')
@@ -123,5 +159,4 @@ suite('Functional Tests', () => {
       done();
     });
   });
-  */
 });
