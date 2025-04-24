@@ -49,7 +49,7 @@ suite('Functional Tests', () => {
       assert.deepEqual(res.body, { error: 'Expected puzzle to be 81 characters long' }, 'Returned object is wrong');
       done();
     });
-  })
+  });
 
   test('Solve a invalid puzzle: unsolvable', (done) => {
     chai.request(server)
@@ -60,9 +60,68 @@ suite('Functional Tests', () => {
       assert.deepEqual(res.body, { error: 'Puzzle cannot be solved' }, 'Returned object is wrong');
       done();
     });
-  })
+  });
+
+  // ADD PASS CASES
+
+  test('Check post wt missing fields', (done) => {
+    chai.request(server)
+    .post('/api/check')
+    .end((err, res) => {
+      assert.equal(res.status, 200, 'res.status is wrong');
+      assert.deepEqual(res.body, { error: 'Required field(s) missing' }, 'Returned object is wrong');
+      done();
+    });
+  });
+
+  test('Check post wt invalid characters', (done) => {
+    chai.request(server)
+    .post('/api/check')
+    .send({ puzzle: puzzlesAndSolutions[5][0], coordinate: "A1", value: "1"})
+    .end((err, res) => {
+      if (err) {
+        console.error(err);
+        done(err);
+        return;
+      }
+      assert.equal(res.status, 200, 'res.status is wrong');
+      assert.deepEqual(res.body, { error: 'Invalid characters in puzzle' }, 'Returned object is wrong');
+      done();
+    });
+  });
+
+  /*
+  test('Check post wt invalid length', (done) => {
+    chai.request(server)
+    .post('/api/check')
+    .send({ puzzle: puzzlesAndSolutions[6][0], coordinate: "A1", value: "1"})
+    .end((err, res) => {
+      assert.equal(res.status, 200, 'res.status is wrong');
+      assert.deepEqual(res.body, { error: 'Expected puzzle to be 81 characters long' }, 'Returned object is wrong');
+      done();
+    });
+  });
+
+  test('Check post wt invalid coordinate', (done) => {
+    chai.request(server)
+    .post('/api/check')
+    .send({ puzzle: puzzlesAndSolutions[0][0], coordinate: "J10", value: "3"})
+    .end((err, res) => {
+      assert.equal(res.status, 200, 'res.status is wrong');
+      assert.deepEqual(res.body, { error: 'Invalid coordinate' }, 'Returned object is wrong');
+      done();
+    });
+  });
+
+  test('Check post wt invalid placement', (done) => {
+    chai.request(server)
+    .post('/api/check')
+    .send({ puzzle: puzzlesAndSolutions[0][0], coordinate: "A2", value: "12d"})
+    .end((err, res) => {
+      assert.equal(res.status, 200, 'res.status is wrong');
+      assert.deepEqual(res.body, { error: 'Invalid value' }, 'Returned object is wrong');
+      done();
+    });
+  });
+  */
 });
-
-/*
-
-*/
